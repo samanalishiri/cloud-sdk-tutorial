@@ -1,0 +1,20 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>azure-tutorial</artifactId>
+        <groupId>com.saman.tutorial.azure</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.saman.tutorial.azure.queue</groupId>
+    <artifactId>queue-tutorial</artifactId>
+    <packaging>jar</packaging>
+    <name>Queue Tutorial</name>
+    <description>Do operation on queue</description>
+    <dependencies>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-queue</artifactId>
+        </dependency>
+    </dependencies>
+</project>
