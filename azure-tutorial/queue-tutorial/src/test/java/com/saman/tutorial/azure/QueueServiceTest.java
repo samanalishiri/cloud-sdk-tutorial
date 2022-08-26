@@ -34,12 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class QueueServiceTest {
 
-    private static final QueueService underTest = new QueueService(new Properties() {{
-        put("accountName", System.getenv("ACCOUNT_NAME"));
-        put("accountKey", System.getenv("ACCOUNT_KEY"));
-        put("connectionString", System.getenv("AZURE_STORAGE_CONNECTION_STRING"));
-        put("queueName", "saman-test-queue");
-    }});
+    private static final QueueService underTest = new QueueService(TestEnv.loadAccountProperties());
     private final Logger logger = LoggerFactory.getLogger(QueueServiceTest.class.getSimpleName());
 
     @BeforeAll

@@ -52,9 +52,10 @@ public class StorageService {
         var accountName = properties.getProperty("accountName");
         var accountKey = properties.getProperty("accountKey");
         var connectionString = properties.getProperty("connectionString");
+        var url = properties.getProperty("url");
 
         client = new BlobServiceClientBuilder()
-                .endpoint(String.format(Locale.ROOT, "https://%s.blob.core.windows.net", accountName))
+                .endpoint(url)
                 .credential(new StorageSharedKeyCredential(accountName, accountKey))
                 .connectionString(connectionString)
                 .buildClient();
@@ -71,7 +72,7 @@ public class StorageService {
 
         return Try.of(() -> client.createBlobContainerIfNotExists(name))
                 .onSuccess(container -> logger.info("container {} was created: {}", name, container.exists()))
-                .onFailure(ex -> logger.error("create container {} failed", name))
+                .onFailure(ex -> logger.error("create container {} failed: {}", name, ex.getMessage()))
                 .toJavaOptional();
     }
 
@@ -82,7 +83,7 @@ public class StorageService {
 
         return Try.of(() -> client.getBlobContainerClient(containerName).getBlobClient(fileName))
                 .andThen(blobClient -> blobClient.uploadFromFile(fileDirectory + fileName))
-                .onFailure(ex -> logger.error("upload {} failed", fileName))
+                .onFailure(ex -> logger.error("upload {} failed: {}", fileName, ex.getMessage()))
                 .onSuccess(blobClient -> logger.info("file {} was uploaded: {}", fileName, blobClient.getBlobUrl()))
                 .map(BlobClientBase::getBlobUrl)
                 .toJavaOptional();
@@ -104,7 +105,7 @@ public class StorageService {
         isBlank(targetPath, "target path is invalid");
 
         return Try.of(() -> client.getBlobContainerClient(containerName).getBlobClient(sourceName))
-                .onFailure(ex -> logger.error("download {} failed", sourceName))
+                .onFailure(ex -> logger.error("download {} failed: {}", sourceName, ex.getMessage()))
                 .map(blobClient -> blobClient.downloadToFile(targetPath))
                 .toJavaOptional();
     }
@@ -115,7 +116,7 @@ public class StorageService {
 
         Try.of(() -> client.getBlobContainerClient(containerName).getBlobClient(fileName))
                 .onSuccess(BlobClientBase::deleteIfExists)
-                .onFailure(throwable -> logger.error("delete {} failed", fileName));
+                .onFailure(ex -> logger.error("delete {} failed: {}", fileName, ex.getMessage()));
     }
 
     public void deleteContainer(String containerName) {
@@ -123,6 +124,6 @@ public class StorageService {
 
         Try.of(() -> client.deleteBlobContainerIfExists(containerName))
                 .onSuccess(a -> logger.info("container {} was deleted", containerName))
-                .onFailure(throwable -> logger.error("delete container {} failed", containerName));
+                .onFailure(ex -> logger.error("delete container {} failed: {}", containerName, ex.getMessage()));
     }
 }

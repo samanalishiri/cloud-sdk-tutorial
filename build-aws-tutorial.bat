@@ -1,4 +1,4 @@
-call mvn -f .\aws-tutorial\pom.xml clean package
+call mvn -f .\aws-tutorial\pom.xml clean package -DskipTests=true
 call mvn -f .\aws-tutorial\pom.xml test -Dvendor=Localstack
 call mvn -f .\aws-tutorial\pom.xml test -Dvendor=AwsEnv
 # timeout 60

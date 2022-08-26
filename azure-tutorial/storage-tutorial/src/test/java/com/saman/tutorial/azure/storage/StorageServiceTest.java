@@ -19,6 +19,7 @@ package com.saman.tutorial.azure.storage;
 
 import org.junit.jupiter.api.*;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import static java.lang.String.format;
@@ -33,11 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class StorageServiceTest {
 
-    private static final StorageService underTest = new StorageService(new Properties() {{
-        put("accountName", System.getenv("ACCOUNT_NAME"));
-        put("accountKey", System.getenv("ACCOUNT_KEY"));
-        put("connectionString", System.getenv("AZURE_STORAGE_CONNECTION_STRING"));
-    }});
+    private static final StorageService underTest = new StorageService(TestEnv.loadAccountProperties());
 
     @BeforeAll
     static void setUp() {

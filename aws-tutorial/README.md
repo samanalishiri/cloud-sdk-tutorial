@@ -38,7 +38,7 @@ export AWS_SECRET_ACCESS_KEY=aws_secret_access_key >> ${HOME}/.bashrc
 source ${HOME}/.bashrc
 ```
 
-3- Install AWS SDK and type the following commands in the terminal if you want to use
+3- Install AWS CLI and type the following commands in the terminal if you want to use
 `DefaultCredentialsProvider` class for credentials.
 
 ```shell
