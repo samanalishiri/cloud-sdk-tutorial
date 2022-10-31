@@ -121,7 +121,7 @@ class SqsServiceTest {
                         }
                     });
             assertTrue(it.hasMessages());
-            createFile(format("src/test/resources/%s_%d.txt", "temp-test-result", System.currentTimeMillis()), convert(it.messages()));
+            createFile(format("target/%s_%d.txt", "temp-test-result", System.currentTimeMillis()), convert(it.messages()));
         });
     }
 

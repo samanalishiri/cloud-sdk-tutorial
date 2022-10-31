@@ -21,8 +21,6 @@ import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Properties;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -34,8 +32,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class QueueServiceTest {
 
-    private static final QueueService underTest = new QueueService(TestEnv.loadAccountProperties());
     private final Logger logger = LoggerFactory.getLogger(QueueServiceTest.class.getSimpleName());
+
+    private static final QueueService underTest = new QueueServiceImpl(TestEnv.loadAccountProperties());
 
     @BeforeAll
     static void setUp() {

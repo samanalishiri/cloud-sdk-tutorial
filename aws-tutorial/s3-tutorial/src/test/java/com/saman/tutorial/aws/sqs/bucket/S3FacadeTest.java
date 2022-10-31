@@ -125,7 +125,7 @@ class S3FacadeTest {
 
         byte[] object = underTest.getOneObject(bucketName, objectKey);
         assertNotNull(object);
-        IoUtils.createFile(format("src/test/resources/%s_%d.txt", filePath, System.currentTimeMillis()), object);
+        IoUtils.createFile(format("target/%s_%d.txt", filePath, System.currentTimeMillis()), object);
     }
 
 

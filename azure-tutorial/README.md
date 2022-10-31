@@ -52,7 +52,7 @@ source ${HOME}/.bashrc
 
 ## Setup Azure Storage Explorer
 
-[Install Azure storage explorer.](https://azure.microsoft.com/en-us/products/storage/storage-explorer/#overview)
+Download and setup [Azure storage explorer.](https://azure.microsoft.com/en-us/products/storage/storage-explorer/#overview)
 
 ## Build
 

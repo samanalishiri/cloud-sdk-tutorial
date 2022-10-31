@@ -85,10 +85,7 @@ class StorageServiceTest {
     void downloadFile_GivenParameter_GivenContainerNameAndSourceNameAndTargetPath_WhenDownloadFile_ThenReturnBlobProperties() {
         var givenContainerName = "saman-azure-tutorial-storage";
         var givenSourceName = "test-file.txt";
-        var givenTargetPath = format("%s%s_%d.txt",
-                "src/test/resources/",
-                "temp-test-result",
-                System.currentTimeMillis());
+        var givenTargetPath = format("%s%s_%d.txt", "target/", "temp-test-result", System.currentTimeMillis());
 
         var result = underTest.downloadFile(givenContainerName, givenSourceName, givenTargetPath);
         assertNotNull(result);
