@@ -1,12 +1,53 @@
-## Description
+# <p align="center">Java Cloud Tutorial</p>
 
-This tutorial is included cloud SDKs such as AWS, Azure, GCP, ... samples that implement by Java.
+This tutorial is included cloud SDKs such as AWS, Azure, GCP, ... samples that implement by Java. Therefore, you can see
+the following links for more details as official tutorials.
 
-- [AWS SDK Java Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/aws-tutorial)
-    - [Hello World](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/aws-tutorial/hello-world)
-    - [Bucket Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/aws-tutorial/s3-tutorial)
-    - [SQS Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/aws-tutorial/sqs-tutorial)
-- [Azure SDK Java Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/azure-tutorial)
-    - [Hello World](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/azure-tutorial/azure-hello-world)
-    - [Storage Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/azure-tutorial/storage-tutorial)
-    - [Queue Tutorial](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/master/azure-tutorial/queue-tutorial) 
+* For AWS follow [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
+
+## Table of content
+
+- [AWS SDK Java Tutorial](aws-tutorial)
+    - [Hello World](aws-tutorial/hello-world)
+    - [Bucket Tutorial](aws-tutorial/s3-tutorial)
+    - [SQS Tutorial](aws-tutorial/sqs-tutorial)
+- [Azure SDK Java Tutorial](azure-tutorial)
+    - [Hello World](azure-tutorial/azure-hello-world)
+    - [Storage Tutorial](azure-tutorial/storage-tutorial)
+    - [Queue Tutorial](azure-tutorial/queue-tutorial)
+
+## Prerequisites
+
+- Java 21
+- Maven 3
+- AWS/Localstack
+- Azure/Azurite
+
+## Build
+
+```shell
+mvn -f ./aws-tutorial/pom.xml clean package -DskipTests=true
+mvn -f ./azure-tutorial/pom.xml clean package -DskipTests=true
+```
+
+## Test
+
+Localstack and Azurite are mandatory for the test.
+
+```shell
+mvn -f ./aws-tutorial/pom.xml test -Dcredentials=Localstack
+mvn -f ./azure-tutorial/pom.xml test -Dcredentials=Azurite
+```
+
+## Clean (Temp Files)
+
+```shell
+rm -rf ./aws-tutorial/sqs-tutorial/src/test/resources/temp-test-result_*
+rm -rf ./aws-tutorial/s3-tutorial/src/test/resources/temp-test-result_*
+rm -rf ./azure-tutorial/storage-tutorial/src/test/resources/temp-test-result_*
+```
+
+##
+
+**<p align="center"> [Top](#java-cloud-tutorial) </p>**
+

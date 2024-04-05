@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CredentialsUtilsTest {
 
     @Test
-    @DisplayName("load default credentials from AWS SDK")
+    @DisplayName("load default credentials via AWS CLI")
     void loadCredentials_GivenNoParam_WhenLoadDefaultCredentialsFromSdk_ThenItShouldBeLoadDefaultProfile() {
         Optional<AwsCredentials> credentials = CredentialsUtils.loadCredentials();
         assertTrue(credentials.isPresent());

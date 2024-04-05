@@ -95,7 +95,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <systemProperties>
-                        <vendor>unknown</vendor>
+                        <credentials>unknown</credentials>
                     </systemProperties>
                 </configuration>
                 <dependencies>

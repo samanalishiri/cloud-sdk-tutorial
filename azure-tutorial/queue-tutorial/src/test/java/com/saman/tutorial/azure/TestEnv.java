@@ -30,14 +30,14 @@ import java.util.Properties;
 public class TestEnv {
 
     public static Properties loadAccountProperties() {
-        return Try.of(() -> System.getProperty("vendor"))
+        return Try.of(() -> System.getProperty("credentials"))
                 .map(s -> switch (s) {
-                    case "AzureEnv" -> AzureEnv.PROPERTIES;
+                    case "ENV" -> ENV.PROPERTIES;
                     case "Azurite" -> Azurite.PROPERTIES;
-                    default -> throw new RuntimeException("Vendor is unknown");
+                    default -> throw new RuntimeException("credentials is unknown");
                 })
                 .getOrElse(() -> {
-                    System.setProperty("vendor", "Azurite");
+                    System.setProperty("credentials", "Azurite");
                     return Azurite.PROPERTIES;
                 });
     }
@@ -52,7 +52,7 @@ public class TestEnv {
         }};
     }
 
-    private static class AzureEnv {
+    private static class ENV {
         private static final Properties PROPERTIES = new Properties() {{
             put("accountName", System.getenv("ACCOUNT_NAME"));
             put("accountKey", System.getenv("ACCOUNT_KEY"));

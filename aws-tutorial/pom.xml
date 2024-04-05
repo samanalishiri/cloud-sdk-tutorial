@@ -108,7 +108,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <vendor>unknown</vendor>
+                        <credentials>unknown</credentials>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>

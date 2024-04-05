@@ -1,16 +1,16 @@
-## Description
+# <p align="center">Java AWS Tutorial</p>
 
 This tutorial developed around the AWS cloud platform.
 
 It is included:
 
-- hello world
-- bucket-tutorial
-- sqs-tutorial
+- [Hello World](hello-world)
+- [Bucket Tutorial](s3-tutorial)
+- [SQS Tutorial](sqs-tutorial)
 
 ## Prerequisites
 
-- Java 17
+- Java 21
 - Maven 3
 - AWS/Localstack
 
@@ -62,9 +62,9 @@ Then answer the prompts:
 
 ## Set up Localstack
 
-[Install Localstack.](https://github.com/localstack/localstack)
+See [Localstack](https://github.com/localstack/localstack) website to obtain more details.
 
-### Install by Docker Compose
+### Install (Docker Compose)
 
 Install Localstack on docker via docker compose.
 
@@ -93,10 +93,10 @@ Execute the following command to install.
 docker-compose -f ./localstack-docker-compose.yaml -p aws-tutorial up --build -d
 ```
 
-Also, you can execute
+Also, you can execute the following bat/sh file.
 
-* [for Windows](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker.bat)
-* [for Unix/Linux](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker)
+* [For Windows](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker.bat)
+* [For Unix/Linux](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker)
 
 ## Build
 
@@ -104,20 +104,30 @@ Also, you can execute
 mvn clean package -DskipTests=true
 ```
 
-### Test with Aws Env
+### Test (ENV)
+
+Get credentials from environment variables.
 
 ```shell
-mvn test -Dvendor=ENV
+mvn test -Dcredentials=ENV
 ``` 
 
-### Test with Aws CLI
+### Test (CLI)
+
+Get credentials from AWS CLI.
 
 ```shell
-mvn test -Dvendor=CLI
+mvn test -Dcredentials=CLI
 ``` 
 
-### Test with Localstack
+### Test (Localstack)
+
+For testing with Localstack, it does not need to get credentials.
 
 ```shell
-mvn test -Dvendor=Localstack
+mvn test -Dcredentials=Localstack
 ```
+
+##
+
+**<p align="center"> [Top](#java-aws-tutorial) </p>**

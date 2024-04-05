@@ -63,11 +63,11 @@ mvn clean package -DskipTests=true
 ### Test with Azure Env
 
 ```shell
-mvn test -Dvendor=AzureEnv
+mvn test -Dcredentials=ENV
 ```
 
 ### Test with Azurite
 
 ```shell
-mvn test -Dvendor=Azurite
+mvn test -Dcredentials=Azurite
 ```

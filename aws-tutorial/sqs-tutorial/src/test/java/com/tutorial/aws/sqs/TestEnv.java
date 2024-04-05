@@ -29,15 +29,15 @@ import java.util.Properties;
 public class TestEnv {
 
     public static Properties loadCredentials() {
-        return Try.of(() -> System.getProperty("vendor"))
+        return Try.of(() -> System.getProperty("credentials"))
                 .map(s -> switch (s) {
                     case "ENV" -> ENV.PROPERTIES;
                     case "CLI" -> CLI.PROPERTIES;
                     case "Localstack" -> LocalStack.PROPERTIES;
-                    default -> throw new RuntimeException("Vendor is unknown");
+                    default -> throw new RuntimeException("credentials is unknown");
                 })
                 .getOrElse(() -> {
-                    System.setProperty("vendor", "Localstack");
+                    System.setProperty("credentials", "Localstack");
                     return LocalStack.PROPERTIES;
                 });
     }
