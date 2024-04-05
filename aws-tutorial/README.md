@@ -95,8 +95,8 @@ docker-compose -f ./localstack-docker-compose.yaml -p aws-tutorial up --build -d
 
 Also, you can execute the following bat/sh file.
 
-* [For Windows](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker.bat)
-* [For Unix/Linux](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker)
+* [For Windows](install-localstack-on-docker.bat)
+* [For Unix/Linux](install-localstack-on-docker.sh)
 
 ## Build
 
