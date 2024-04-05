@@ -8,20 +8,15 @@
         <artifactId>aws-tutorial</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.tutorial.aws.sqs</groupId>
-    <artifactId>sqs-tutorial</artifactId>
+    <artifactId>hello-world</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Message Queue (SQS) Tutorial</name>
-    <description>Do operation on SQS</description>
+    <name>Hello World</name>
+    <description>Load default configuration from installed AWS CLI</description>
     <dependencies>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>kms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sqs</artifactId>
         </dependency>
     </dependencies>
 </project>

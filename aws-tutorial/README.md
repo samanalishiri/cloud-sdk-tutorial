@@ -4,7 +4,7 @@ This tutorial developed around the AWS cloud platform.
 
 It is included:
 
-- aws-hello world
+- hello world
 - bucket-tutorial
 - sqs-tutorial
 
@@ -16,12 +16,14 @@ It is included:
 
 ## Set up AWS
 
+### Setup Account
+
 1- [Create account in AWS.](https://aws.amazon.com/)
 
-2- Create a user in order to develop. (do not use root user)
+2- Create a user (e.g. aws-tutorial) in order to develop, management, etc. (do not use root user)
 
-Save the following parameters in the machine as an OS environment variable if you want to use
-`StaticCredentialsProvider` class for credentials.
+Save the following parameters in the machine as an OS environment variable if you want to use`StaticCredentialsProvider`
+class for credentials.
 
 - windows
 
@@ -38,11 +40,16 @@ export AWS_SECRET_ACCESS_KEY=aws_secret_access_key >> ${HOME}/.bashrc
 source ${HOME}/.bashrc
 ```
 
-3- Install AWS CLI and type the following commands in the terminal if you want to use
-`DefaultCredentialsProvider` class for credentials.
+### Setup CLI
+
+Install AWS CLI from this [link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and
+type the following commands in the terminal if you want to use `DefaultCredentialsProvider` class for credentials.
 
 ```shell
 aws --version
+```
+
+```shell
 aws configure
 ```
 
@@ -55,13 +62,41 @@ Then answer the prompts:
 
 ## Set up Localstack
 
-1- [Install Localstack.](https://github.com/localstack/localstack)
+[Install Localstack.](https://github.com/localstack/localstack)
 
-- also you can execute
-    - [install-localstack-on-docker.bat](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker.bat)
-      for Windows
-    - [install-localstack-on-docker](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker)
-      for Unix/Linux
+### Install by Docker Compose
+
+Install Localstack on docker via docker compose.
+
+```yaml
+version: "3.8"
+
+services:
+  localstack:
+    container_name: localstack
+    hostname: localstack
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+```
+
+Execute the following command to install.
+
+```shell
+docker-compose -f ./localstack-docker-compose.yaml -p aws-tutorial up --build -d
+```
+
+Also, you can execute
+
+* [for Windows](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker.bat)
+* [for Unix/Linux](https://github.com/samanalishiri/cloud-sdk-tutorial/tree/main/aws-tutorial/install-localstack-on-docker)
 
 ## Build
 
@@ -72,13 +107,13 @@ mvn clean package -DskipTests=true
 ### Test with Aws Env
 
 ```shell
-mvn test -Dvendor=AwsEnv
+mvn test -Dvendor=ENV
 ``` 
 
 ### Test with Aws CLI
 
 ```shell
-mvn test -Dvendor=AwsCli
+mvn test -Dvendor=CLI
 ``` 
 
 ### Test with Localstack

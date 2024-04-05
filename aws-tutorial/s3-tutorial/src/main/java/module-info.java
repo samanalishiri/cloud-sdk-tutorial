@@ -1,9 +1,9 @@
-import com.saman.tutorial.aws.sqs.bucket.service.S3Facade;
+import com.tutorial.aws.bucket.service.S3Facade;
 
 open module sthree.tutorial {
-    exports com.saman.tutorial.aws.sqs.bucket.service;
-    exports com.saman.tutorial.aws.sqs.bucket.impl;
-    exports com.saman.tutorial.aws.sqs.bucket.utils;
+    exports com.tutorial.aws.bucket.service;
+    exports com.tutorial.aws.bucket.impl;
+    exports com.tutorial.aws.bucket.utils;
 
     requires software.amazon.awssdk.services.s3;
     requires software.amazon.awssdk.core;

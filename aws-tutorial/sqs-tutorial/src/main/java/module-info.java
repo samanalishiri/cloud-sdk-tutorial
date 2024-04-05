@@ -1,7 +1,7 @@
-module sqs.tutorial {
-    exports com.saman.tutorial.aws.sqs.service;
-    exports com.saman.tutorial.aws.sqs.impl;
-    exports com.saman.tutorial.aws.sqs.utils;
+open module sqs.tutorial {
+    exports com.tutorial.aws.sqs.service;
+    exports com.tutorial.aws.sqs.impl;
+    exports com.tutorial.aws.sqs.utils;
 
     requires software.amazon.awssdk.auth;
     requires software.amazon.awssdk.core;

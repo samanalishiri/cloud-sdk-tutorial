@@ -1,1 +1,0 @@
-package com.saman.tutorial.aws.sqs.impl;

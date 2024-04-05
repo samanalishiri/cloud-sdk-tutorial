@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create an IAM user.
+
+Resources:
+  TutorialGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: TutorialGroup
+
+  John:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: John
+      Groups:
+        - TutorialGroup
+
+  JohnAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref John
+
+Outputs:
+  outputName:
+    Description: Tutorial group name
+    Value: !Ref TutorialGroup
+  outputARN:
+    Description: Tutorial group ARN
+    Value: !GetAtt TutorialGroup.Arn
+  AccessKeyID:
+    Value: !Ref JohnAccessKey
+  SecretAccessKey:
+    Value: !GetAtt JohnAccessKey.SecretAccessKey
+  User:
+    Value: !Ref John

@@ -1,19 +1,16 @@
-version: '3.8'
+version: "3.8"
+
 services:
   localstack:
-    image: localstack/localstack-full
     container_name: localstack
+    hostname: localstack
+    image: localstack/localstack
     ports:
-      - "4566:4566" # use in cloud URL
-      - "8055:8080"
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
     environment:
-      - SERVICES=s3,sqs,dynamodb
-      - DEFAULT_REGION=eu-central-1
-      - DATA_DIR=/tmp/localstack/data
-      - START_WEB=1
-      - PORT_WEB_UI=8080
-      - LAMBDA_EXECUTOR=local
-      - DOCKER_HOST=unix:///var/run/docker.sock
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
     volumes:
-      - "~/docker_compose/localstack:/var/lib/localstack"
-      - "~/docker_compose/localstack/tmp:/tmp/localstack/data"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
