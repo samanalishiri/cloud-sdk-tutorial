@@ -15,9 +15,9 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.impl;
+package com.tutorial.aws.bucket.implementation.object;
 
-import com.tutorial.aws.bucket.service.BucketObjectAsyncService;
+import com.tutorial.aws.bucket.contract.object.ObjectAsyncService;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -31,24 +31,19 @@ import static software.amazon.awssdk.core.async.AsyncResponseTransformer.toBytes
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public class BucketObjectAsyncServiceImpl implements BucketObjectAsyncService {
+public class ObjectAsyncServiceImpl implements ObjectAsyncService {
 
     private final S3AsyncClient client;
 
-    public BucketObjectAsyncServiceImpl(S3AsyncClient client) {
+    public ObjectAsyncServiceImpl(S3AsyncClient client) {
         requireNonNull(client);
 
         this.client = client;
     }
 
     @Override
-    public void putOneObject(String bucketName,
-                             String objectKey,
-                             byte[] object,
-                             BiConsumer<? super PutObjectResponse, ? super Throwable> action) {
+    public void putOneObject(String bucketName, String objectKey, byte[] object, BiConsumer<? super PutObjectResponse, ? super Throwable> action) {
         requireNonNull(bucketName);
         requireNonNull(objectKey);
         requireNonNull(object);
@@ -60,9 +55,7 @@ public class BucketObjectAsyncServiceImpl implements BucketObjectAsyncService {
     }
 
     @Override
-    public void getOneObject(String bucketName,
-                             String objectKey,
-                             BiConsumer<? super ResponseBytes<GetObjectResponse>, ? super Throwable> action) {
+    public void getOneObject(String bucketName, String objectKey, BiConsumer<? super ResponseBytes<GetObjectResponse>, ? super Throwable> action) {
         requireNonNull(bucketName);
         requireNonNull(objectKey);
         requireNonNull(action);

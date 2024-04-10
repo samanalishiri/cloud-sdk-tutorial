@@ -15,9 +15,9 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.impl;
+package com.tutorial.aws.bucket.implementation.bucket;
 
-import com.tutorial.aws.bucket.service.BucketService;
+import com.tutorial.aws.bucket.contract.bucket.BucketService;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -31,8 +31,6 @@ import static java.util.Optional.ofNullable;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 public final class BucketServiceImpl implements BucketService {
 
@@ -67,7 +65,8 @@ public final class BucketServiceImpl implements BucketService {
     public Optional<Bucket> getOneBucket(String name) {
         requireNonNull(name);
 
-        return getAllBuckets().stream()
+        return getAllBuckets()
+                .stream()
                 .filter(bucket -> bucket.name().equals(name))
                 .findFirst();
     }
@@ -81,17 +80,6 @@ public final class BucketServiceImpl implements BucketService {
 
     @Override
     public List<Bucket> getAllBuckets() {
-        return client.listBuckets(SdkBuilder::build)
-                .buckets();
+        return client.listBuckets(SdkBuilder::build).buckets();
     }
 }
-
-
-
-
-
-
-
-
-
-

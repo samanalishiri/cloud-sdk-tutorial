@@ -15,13 +15,11 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.service;
+package com.tutorial.aws.bucket.contract.object;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public interface Service {
+public interface ObjectService extends ObjectSyncService, ObjectAsyncService {
 
 }

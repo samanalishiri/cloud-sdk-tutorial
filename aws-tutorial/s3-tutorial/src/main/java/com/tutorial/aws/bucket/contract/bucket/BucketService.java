@@ -15,7 +15,7 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.service;
+package com.tutorial.aws.bucket.contract.bucket;
 
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.DeleteBucketResponse;
@@ -26,10 +26,8 @@ import java.util.Optional;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public interface BucketService extends Service {
+public interface BucketService {
 
     /**
      * This method create a bucket by the S3 service and wait to get response.

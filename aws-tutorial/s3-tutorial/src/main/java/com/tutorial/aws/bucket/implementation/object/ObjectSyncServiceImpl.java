@@ -15,9 +15,9 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.impl;
+package com.tutorial.aws.bucket.implementation.object;
 
-import com.tutorial.aws.bucket.service.BucketObjectSyncService;
+import com.tutorial.aws.bucket.contract.object.ObjectSyncService;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
@@ -32,14 +32,12 @@ import static software.amazon.awssdk.core.sync.RequestBody.fromBytes;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public class BucketObjectSyncServiceImpl implements BucketObjectSyncService {
+public class ObjectSyncServiceImpl implements ObjectSyncService {
 
     private final S3Client client;
 
-    public BucketObjectSyncServiceImpl(S3Client client) {
+    public ObjectSyncServiceImpl(S3Client client) {
         requireNonNull(client);
 
         this.client = client;
@@ -51,9 +49,7 @@ public class BucketObjectSyncServiceImpl implements BucketObjectSyncService {
         requireNonNull(objectKey);
         requireNonNull(object);
 
-        return ofNullable(
-                client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), fromBytes(object))
-        );
+        return ofNullable(client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), fromBytes(object)));
     }
 
     @Override
@@ -69,8 +65,7 @@ public class BucketObjectSyncServiceImpl implements BucketObjectSyncService {
 
         return ofNullable(client.deleteObjects(requestBuilder -> requestBuilder
                 .bucket(bucketName)
-                .delete(builder ->
-                        builder.objects(singletonList(ObjectIdentifier.builder().key(objectKey).build())).build())
+                .delete(builder -> builder.objects(singletonList(ObjectIdentifier.builder().key(objectKey).build())).build())
                 .build()));
     }
 }

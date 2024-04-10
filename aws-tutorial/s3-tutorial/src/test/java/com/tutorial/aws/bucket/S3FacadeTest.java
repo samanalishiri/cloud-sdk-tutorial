@@ -17,9 +17,9 @@
 
 package com.tutorial.aws.bucket;
 
-import com.tutorial.aws.bucket.service.S3Facade;
+import com.tutorial.aws.bucket.contract.S3Facade;
 import com.tutorial.aws.bucket.utils.IoUtils;
-import com.tutorial.aws.bucket.utils.S3ClientFactory;
+import com.tutorial.aws.bucket.factory.S3ClientFactory;
 import io.vavr.control.Try;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,12 +35,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 @DisplayName("Bucket Service Tests")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class S3FacadeTest {
+
+    public static final String BUCKET_NAME = "saman-aws-tutorial-bucket";
+
+    public static final String OBJECT_NAME = "saman-aws-tutorial-bucket";
+
+    public static final String FILE_NAME = "hello.txt";
+
+    public static final String TEST_RESOURCES_PATH = "src/test/resources/%s";
+
+    public static final String TARGET_PATH = "target/%s_%d";
 
     private static S3Facade underTest;
 
@@ -53,9 +61,9 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {"saman-aws-tutorial-bucket"})
-    @DisplayName("bucket sync creation")
+    @ValueSource(strings = {BUCKET_NAME})
     @Order(1)
+    @DisplayName("bucket sync creation")
     void createBucket_GivenBucketNameAsParam_WhenSendCreateRequest_ThenItShouldBeWaitUntilGetOKStatus(String name) {
         Optional<HeadBucketResponse> response = underTest.createBucket(name);
         assertTrue(response.isPresent());
@@ -66,8 +74,8 @@ class S3FacadeTest {
     }
 
     @Test
-    @DisplayName("get all buckets")
     @Order(2)
+    @DisplayName("get all buckets")
     void getAllBuckets_GivenNoParam_WhenSendGetRequest_ThenReturnAllBucketAsList() {
         List<Bucket> buckets = underTest.getAllBuckets();
         assertNotNull(buckets);
@@ -75,9 +83,9 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {"saman-aws-tutorial-bucket"})
-    @DisplayName("get one bucket")
+    @ValueSource(strings = {BUCKET_NAME})
     @Order(3)
+    @DisplayName("get one bucket")
     void getOneBucket_GivenBucketNameAsParam_WhenSendGetRequest_ThenReturnTheBucket(String name) {
         Optional<Bucket> bucket = underTest.getOneBucket(name);
         assertTrue(bucket.isPresent());
@@ -85,14 +93,13 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', fileName=''{2}''")
-    @CsvSource({"saman-aws-tutorial-bucket, aws-object, test-file.txt"})
-    @DisplayName("put one object")
+    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
     @Order(4)
-    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendPutObjectRequest_ThenReturnTheOKStatus(
-            String bucketName, String objectKey, String fileName) {
+    @DisplayName("put one object")
+    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendPutObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey, String fileName) {
 
         Optional<PutObjectResponse> response = underTest.putOneObject(bucketName, objectKey,
-                IoUtils.readFile(format("src/test/resources/%s", fileName)));
+                IoUtils.readFile(format(TEST_RESOURCES_PATH, fileName)));
         assertTrue(response.isPresent());
         response.ifPresent(it -> {
             assertTrue(it.sdkHttpResponse().isSuccessful());
@@ -102,24 +109,22 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', filePath=''{2}''")
-    @CsvSource({"saman-aws-tutorial-bucket, aws-object, temp-test-result"})
-    @DisplayName("get one object")
+    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
     @Order(5)
-    void getOneObject_GivenBucketNameAndObjectKeyAndFilePathAsParam_WhenSendGetObjectRequest_ThenReturnTheByteArray(
-            String bucketName, String objectKey, String filePath) {
+    @DisplayName("get one object")
+    void getOneObject_GivenBucketNameAndObjectKeyAndFilePathAsParam_WhenSendGetObjectRequest_ThenReturnTheByteArray(String bucketName, String objectKey, String filePath) {
 
         byte[] object = underTest.getOneObject(bucketName, objectKey);
         assertNotNull(object);
-        IoUtils.createFile(format("target/%s_%d.txt", filePath, System.currentTimeMillis()), object);
+        IoUtils.createFile(format(TARGET_PATH, filePath, System.currentTimeMillis()), object);
     }
 
 
     @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}''")
-    @CsvSource({"saman-aws-tutorial-bucket, aws-object"})
-    @DisplayName("delete one object")
+    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME})
     @Order(6)
-    void deleteOneObject_GivenBucketNameAs1stAndObjectKeyAs2ndParam_WhenSendDeleteObjectRequest_ThenReturnTheOKStatus(
-            String bucketName, String objectKey) {
+    @DisplayName("delete one object")
+    void deleteOneObject_GivenBucketNameAs1stAndObjectKeyAs2ndParam_WhenSendDeleteObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey) {
 
         Optional<DeleteObjectsResponse> response = underTest.deleteOneObject(bucketName, objectKey);
         assertTrue(response.isPresent());
@@ -131,13 +136,12 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', fileName=''{2}''")
-    @CsvSource({"saman-aws-tutorial-bucket, aws-object, test-file.txt"})
-    @DisplayName("put one object async")
+    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
     @Order(7)
-    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendAsyncPutObjectRequest_ThenReturnTheOKStatus(
-            String bucketName, String objectKey, String fileName) {
+    @DisplayName("put one object async")
+    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendAsyncPutObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey, String fileName) {
 
-        underTest.putOneObject(bucketName, objectKey, IoUtils.readFile(format("src/test/resources/%s", fileName)), (response, err) -> {
+        underTest.putOneObject(bucketName, objectKey, IoUtils.readFile(format(TEST_RESOURCES_PATH, fileName)), (response, err) -> {
             assertNotNull(response);
             assertTrue(response.sdkHttpResponse().isSuccessful());
             assertEquals(200, response.sdkHttpResponse().statusCode());
@@ -146,21 +150,21 @@ class S3FacadeTest {
     }
 
     @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', filePath=''{2}''")
-    @CsvSource({"saman-aws-tutorial-bucket, aws-object, temp-test-result"})
-    @DisplayName("get one object async")
+    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
     @Order(8)
+    @DisplayName("get one object async")
     void getOneObject_GivenBucketNameAndObjectKeyAndFilePathAsParam_WhenSendAsyncGetObjectRequest_ThenReturnTheByteArray(String bucketName, String objectKey, String filePath) {
         underTest.getOneObject(bucketName, objectKey, (response, err) -> {
             assertNotNull(response);
-            IoUtils.createFile(format("src/test/resources/%s_%d.txt", filePath, System.currentTimeMillis()), response.asByteArray());
+            IoUtils.createFile(format(TARGET_PATH, filePath, System.currentTimeMillis()), response.asByteArray());
             underTest.deleteOneObject(bucketName, objectKey);
         });
     }
 
     @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {"saman-aws-tutorial-bucket"})
-    @DisplayName("delete one bucket")
+    @ValueSource(strings = {BUCKET_NAME})
     @Order(9)
+    @DisplayName("delete one bucket")
     void deleteOneBucket_GivenBucketNameAsParam_WhenSendDeleteRequest_ThenReturnNoContentStatus(String name) {
         Optional<DeleteBucketResponse> response = underTest.deleteOneBucket(name);
         assertTrue(response.isPresent());

@@ -25,8 +25,6 @@ import java.io.InputStream;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 public final class IoUtils {
 

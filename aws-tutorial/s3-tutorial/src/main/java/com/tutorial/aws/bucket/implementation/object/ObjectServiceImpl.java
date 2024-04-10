@@ -15,11 +15,11 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.impl;
+package com.tutorial.aws.bucket.implementation.object;
 
-import com.tutorial.aws.bucket.service.BucketObjectAsyncService;
-import com.tutorial.aws.bucket.service.BucketObjectService;
-import com.tutorial.aws.bucket.service.BucketObjectSyncService;
+import com.tutorial.aws.bucket.contract.object.ObjectAsyncService;
+import com.tutorial.aws.bucket.contract.object.ObjectService;
+import com.tutorial.aws.bucket.contract.object.ObjectSyncService;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -32,16 +32,14 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public class BucketObjectServiceImpl implements BucketObjectService {
+public class ObjectServiceImpl implements ObjectService {
 
-    private final BucketObjectSyncService syncService;
+    private final ObjectSyncService syncService;
 
-    private final BucketObjectAsyncService asyncService;
+    private final ObjectAsyncService asyncService;
 
-    public BucketObjectServiceImpl(BucketObjectSyncService syncService, BucketObjectAsyncService asyncService) {
+    public ObjectServiceImpl(ObjectSyncService syncService, ObjectAsyncService asyncService) {
         requireNonNull(syncService);
         requireNonNull(asyncService);
 

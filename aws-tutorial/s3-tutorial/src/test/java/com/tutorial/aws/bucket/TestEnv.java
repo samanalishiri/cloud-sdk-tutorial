@@ -23,8 +23,6 @@ import java.util.Properties;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 public class TestEnv {
 
@@ -42,6 +40,28 @@ public class TestEnv {
                 });
     }
 
+    private static class ENV {
+
+        private static final Properties PROPERTIES = new Properties();
+
+        static {
+            PROPERTIES.put("region", "eu-central-1");
+            PROPERTIES.put("accessKey", System.getenv("ACCESS_KEY_ID"));
+            PROPERTIES.put("secretKey", System.getenv("SECRET_ACCESS_KEY"));
+        }
+
+    }
+
+    private static class CLI {
+
+        private static final Properties PROPERTIES = new Properties();
+
+        static {
+            PROPERTIES.put("region", "eu-central-1");
+        }
+
+    }
+
     private static class LocalStack {
         private static final Properties PROPERTIES = new Properties();
 
@@ -50,24 +70,6 @@ public class TestEnv {
             PROPERTIES.put("url", "http://localhost:4566");
             PROPERTIES.put("accessKey", "fake");
             PROPERTIES.put("secretKey", "fake");
-        }
-    }
-
-    private static class ENV {
-        private static final Properties PROPERTIES = new Properties();
-
-        static {
-            PROPERTIES.put("region", "eu-central-1");
-            PROPERTIES.put("accessKey", System.getenv("ACCESS_KEY_ID"));
-            PROPERTIES.put("secretKey", System.getenv("SECRET_ACCESS_KEY"));
-        }
-    }
-
-    private static class CLI {
-        private static final Properties PROPERTIES = new Properties();
-
-        static {
-            PROPERTIES.put("region", "eu-central-1");
         }
     }
 }

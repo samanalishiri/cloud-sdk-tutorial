@@ -15,11 +15,11 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.impl;
+package com.tutorial.aws.bucket.implementation;
 
-import com.tutorial.aws.bucket.service.BucketObjectService;
-import com.tutorial.aws.bucket.service.BucketService;
-import com.tutorial.aws.bucket.service.S3Facade;
+import com.tutorial.aws.bucket.contract.object.ObjectService;
+import com.tutorial.aws.bucket.contract.bucket.BucketService;
+import com.tutorial.aws.bucket.contract.S3Facade;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -31,16 +31,14 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 public final class S3FacadeImpl implements S3Facade {
 
     private final BucketService bucketService;
 
-    private final BucketObjectService objectService;
+    private final ObjectService objectService;
 
-    public S3FacadeImpl(BucketService bucketService, BucketObjectService objectService) {
+    public S3FacadeImpl(BucketService bucketService, ObjectService objectService) {
         requireNonNull(bucketService);
         requireNonNull(objectService);
 

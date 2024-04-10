@@ -5,7 +5,7 @@ This tutorial developed around the AWS cloud platform.
 It is included:
 
 - [Hello World](hello-world)
-- [Bucket Tutorial](s3-tutorial)
+- [S3 Tutorial](s3-tutorial)
 - [SQS Tutorial](sqs-tutorial)
 
 ## Prerequisites

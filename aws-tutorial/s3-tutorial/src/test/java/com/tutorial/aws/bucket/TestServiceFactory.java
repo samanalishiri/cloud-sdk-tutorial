@@ -17,23 +17,25 @@
 
 package com.tutorial.aws.bucket;
 
-import com.tutorial.aws.bucket.impl.*;
-import com.tutorial.aws.bucket.service.S3Facade;
-import com.tutorial.aws.bucket.utils.S3ClientFactory;
+import com.tutorial.aws.bucket.implementation.*;
+import com.tutorial.aws.bucket.contract.S3Facade;
+import com.tutorial.aws.bucket.implementation.bucket.BucketServiceImpl;
+import com.tutorial.aws.bucket.implementation.object.ObjectAsyncServiceImpl;
+import com.tutorial.aws.bucket.implementation.object.ObjectServiceImpl;
+import com.tutorial.aws.bucket.implementation.object.ObjectSyncServiceImpl;
+import com.tutorial.aws.bucket.factory.S3ClientFactory;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 public class TestServiceFactory {
 
     public static S3Facade createS3Facade(S3ClientFactory clientFactory) {
-        var bucketService = new BucketServiceImpl(clientFactory.getS3Client(), clientFactory.getRegion());
+        var bucketService = new BucketServiceImpl(clientFactory.createS3Client(), clientFactory.getRegion());
 
-        var objectSyncService = new BucketObjectSyncServiceImpl(clientFactory.getS3Client());
-        var objectAsyncService = new BucketObjectAsyncServiceImpl(clientFactory.getS3AsyncClient());
-        var objectService = new BucketObjectServiceImpl(objectSyncService, objectAsyncService);
+        var objectSyncService = new ObjectSyncServiceImpl(clientFactory.createS3Client());
+        var objectAsyncService = new ObjectAsyncServiceImpl(clientFactory.createAsyncS3Client());
+        var objectService = new ObjectServiceImpl(objectSyncService, objectAsyncService);
 
         return new S3FacadeImpl(bucketService, objectService);
     }

@@ -15,37 +15,44 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.service;
+package com.tutorial.aws.bucket.contract.object;
 
-import software.amazon.awssdk.core.ResponseBytes;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
-import java.util.function.BiConsumer;
+import java.util.Optional;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public interface BucketObjectAsyncService extends Service {
+public interface ObjectSyncService {
 
     /**
-     * This method uses for upload an object in the bucket but, it does not block the thread.
+     * This method use for upload an object to a bucket ({@code bucketName}).
      *
      * @param bucketName name of bucket
      * @param objectKey  key of object
      * @param object     the object to upload in the {@code bucketName}
-     * @param action     an action that should be executed after a request is complete
+     * @return {@link Optional<PutObjectResponse>}
      */
-    void putOneObject(String bucketName, String objectKey, byte[] object, BiConsumer<? super PutObjectResponse, ? super Throwable> action);
+    Optional<PutObjectResponse> putOneObject(String bucketName, String objectKey, byte[] object);
 
     /**
-     * This method uses for download an object in the bucket but, it does not block the thread.
+     * This method use for download an object in the bucket ({@code bucketName}).
      *
      * @param bucketName name of bucket
      * @param objectKey  key of object
-     * @param action     an action that should be executed after a request is complete
+     * @return {@code byte[]}
      */
-    void getOneObject(String bucketName, String objectKey, BiConsumer<? super ResponseBytes<GetObjectResponse>, ? super Throwable> action);
+    byte[] getOneObject(String bucketName, String objectKey);
+
+    /**
+     * This method use for delete an object in the bucket ({@code bucketName}).
+     *
+     * @param bucketName name of bucket
+     * @param objectKey  key of object
+     * @return {@link Optional<DeleteObjectsResponse>}
+     */
+    Optional<DeleteObjectsResponse> deleteOneObject(String bucketName, String objectKey);
+
 }

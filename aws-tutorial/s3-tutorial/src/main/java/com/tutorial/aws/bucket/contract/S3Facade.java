@@ -15,12 +15,13 @@
  *  limitations under the License.
  * ***********************************************************************/
 
-package com.tutorial.aws.bucket.service;
+package com.tutorial.aws.bucket.contract;
+
+import com.tutorial.aws.bucket.contract.bucket.BucketService;
+import com.tutorial.aws.bucket.contract.object.ObjectService;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
-public interface S3Facade extends BucketService, BucketObjectService {
+public interface S3Facade extends BucketService, ObjectService {
 }
