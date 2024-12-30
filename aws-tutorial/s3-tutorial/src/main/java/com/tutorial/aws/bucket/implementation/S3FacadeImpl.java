@@ -17,7 +17,7 @@
 
 package com.tutorial.aws.bucket.implementation;
 
-import com.tutorial.aws.bucket.contract.object.ObjectService;
+import com.tutorial.aws.bucket.contract.object.ObjectServiceFacade;
 import com.tutorial.aws.bucket.contract.bucket.BucketService;
 import com.tutorial.aws.bucket.contract.S3Facade;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -36,14 +36,14 @@ public final class S3FacadeImpl implements S3Facade {
 
     private final BucketService bucketService;
 
-    private final ObjectService objectService;
+    private final ObjectServiceFacade objectServiceFacade;
 
-    public S3FacadeImpl(BucketService bucketService, ObjectService objectService) {
+    public S3FacadeImpl(BucketService bucketService, ObjectServiceFacade objectServiceFacade) {
         requireNonNull(bucketService);
-        requireNonNull(objectService);
+        requireNonNull(objectServiceFacade);
 
         this.bucketService = bucketService;
-        this.objectService = objectService;
+        this.objectServiceFacade = objectServiceFacade;
     }
 
     @Override
@@ -75,7 +75,7 @@ public final class S3FacadeImpl implements S3Facade {
         requireNonNull(objectKey);
         requireNonNull(object);
 
-        return objectService.putOneObject(bucketName, objectKey, object);
+        return objectServiceFacade.putOneObject(bucketName, objectKey, object);
     }
 
     @Override
@@ -83,7 +83,7 @@ public final class S3FacadeImpl implements S3Facade {
         requireNonNull(bucketName);
         requireNonNull(objectKey);
 
-        return objectService.getOneObject(bucketName, objectKey);
+        return objectServiceFacade.getOneObject(bucketName, objectKey);
     }
 
     @Override
@@ -91,7 +91,7 @@ public final class S3FacadeImpl implements S3Facade {
         requireNonNull(bucketName);
         requireNonNull(objectKey);
 
-        return objectService.deleteOneObject(bucketName, objectKey);
+        return objectServiceFacade.deleteOneObject(bucketName, objectKey);
     }
 
     @Override
@@ -100,13 +100,13 @@ public final class S3FacadeImpl implements S3Facade {
         requireNonNull(objectKey);
         requireNonNull(object);
 
-        objectService.putOneObject(bucketName, objectKey, object, action);
+        objectServiceFacade.putOneObject(bucketName, objectKey, object, action);
     }
 
     @Override
     public void getOneObject(String bucketName, String objectKey, BiConsumer<? super ResponseBytes<GetObjectResponse>, ? super Throwable> action) {
         requireNonNull(bucketName);
         requireNonNull(objectKey);
-        objectService.getOneObject(bucketName, objectKey, action);
+        objectServiceFacade.getOneObject(bucketName, objectKey, action);
     }
 }

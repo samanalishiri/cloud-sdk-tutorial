@@ -1,3 +1,3 @@
-docker-compose -f ./azurite-docker-compose.yaml ^
+docker-compose -f ./azurite-docker-compose.yml ^
 -p azure-tutorial ^
 up --build -d

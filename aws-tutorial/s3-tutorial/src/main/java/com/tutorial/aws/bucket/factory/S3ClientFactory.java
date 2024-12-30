@@ -37,15 +37,15 @@ import static java.util.Objects.requireNonNull;
  */
 public final class S3ClientFactory {
 
-    public static final String ACCESS_KEY = "accessKey";
+    public static final String ACCESS_KEY_PROPERTY = "accessKey";
 
-    public static final String SECRET_KEY = "secretKey";
+    public static final String SECRET_KEY_PROPERTY = "secretKey";
 
-    public static final String REGION = "region";
+    public static final String REGION_PROPERTY = "region";
+
+    public static final String URL_PROPERTY = "url";
 
     public static final String DEFAULT_REGION = "us-west-2";
-
-    public static final String URL = "url";
 
     private final Region region;
 
@@ -62,11 +62,11 @@ public final class S3ClientFactory {
     }
 
     private Region readRegion(Properties props) {
-        return Region.of(props.getProperty(REGION, DEFAULT_REGION));
+        return Region.of(props.getProperty(REGION_PROPERTY, DEFAULT_REGION));
     }
 
     private URI readUri(Properties props) {
-        return props.containsKey(URL) ? URI.create(props.getProperty(URL)) : null;
+        return props.containsKey(URL_PROPERTY) ? URI.create(props.getProperty(URL_PROPERTY)) : null;
     }
 
     private AwsCredentialsProvider createCredentialsProvider(Properties props) {
@@ -113,8 +113,8 @@ public final class S3ClientFactory {
         }
 
         public static Optional<Credentials> readFrom(Properties props) {
-            return (props.containsKey(ACCESS_KEY) && props.containsKey(SECRET_KEY))
-                    ? Optional.of(new Credentials(props.getProperty(ACCESS_KEY), props.getProperty(SECRET_KEY)))
+            return (props.containsKey(ACCESS_KEY_PROPERTY) && props.containsKey(SECRET_KEY_PROPERTY))
+                    ? Optional.of(new Credentials(props.getProperty(ACCESS_KEY_PROPERTY), props.getProperty(SECRET_KEY_PROPERTY)))
                     : Optional.empty();
         }
     }

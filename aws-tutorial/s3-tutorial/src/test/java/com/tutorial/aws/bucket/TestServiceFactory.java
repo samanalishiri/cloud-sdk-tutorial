@@ -21,7 +21,7 @@ import com.tutorial.aws.bucket.implementation.*;
 import com.tutorial.aws.bucket.contract.S3Facade;
 import com.tutorial.aws.bucket.implementation.bucket.BucketServiceImpl;
 import com.tutorial.aws.bucket.implementation.object.ObjectAsyncServiceImpl;
-import com.tutorial.aws.bucket.implementation.object.ObjectServiceImpl;
+import com.tutorial.aws.bucket.implementation.object.ObjectServiceFacadeImpl;
 import com.tutorial.aws.bucket.implementation.object.ObjectSyncServiceImpl;
 import com.tutorial.aws.bucket.factory.S3ClientFactory;
 
@@ -35,9 +35,9 @@ public class TestServiceFactory {
 
         var objectSyncService = new ObjectSyncServiceImpl(clientFactory.createS3Client());
         var objectAsyncService = new ObjectAsyncServiceImpl(clientFactory.createAsyncS3Client());
-        var objectService = new ObjectServiceImpl(objectSyncService, objectAsyncService);
+        var objectServiceFacade = new ObjectServiceFacadeImpl(objectSyncService, objectAsyncService);
 
-        return new S3FacadeImpl(bucketService, objectService);
+        return new S3FacadeImpl(bucketService, objectServiceFacade);
     }
 
 }

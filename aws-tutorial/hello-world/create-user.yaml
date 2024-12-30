@@ -7,17 +7,17 @@ Resources:
     Properties:
       GroupName: TutorialGroup
 
-  John:
+  AwsTutorialUsername:
     Type: AWS::IAM::User
     Properties:
-      UserName: John
+      UserName: AwsTutorialUsername
       Groups:
         - TutorialGroup
 
-  JohnAccessKey:
+  AwsTutorialUsernameAccessKey:
     Type: AWS::IAM::AccessKey
     Properties:
-      UserName: !Ref John
+      UserName: !Ref AwsTutorialUsername
 
 Outputs:
   outputName:
@@ -27,8 +27,8 @@ Outputs:
     Description: Tutorial group ARN
     Value: !GetAtt TutorialGroup.Arn
   AccessKeyID:
-    Value: !Ref JohnAccessKey
+    Value: !Ref AwsTutorialUsernameAccessKey
   SecretAccessKey:
-    Value: !GetAtt JohnAccessKey.SecretAccessKey
+    Value: !GetAtt AwsTutorialUsernameAccessKey.SecretAccessKey
   User:
-    Value: !Ref John
+    Value: !Ref AwsTutorialUsername

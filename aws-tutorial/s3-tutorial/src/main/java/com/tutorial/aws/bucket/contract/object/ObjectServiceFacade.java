@@ -20,6 +20,6 @@ package com.tutorial.aws.bucket.contract.object;
 /**
  * @author Saman Alishirishahrbabak
  */
-public interface ObjectService extends ObjectSyncService, ObjectAsyncService {
+public interface ObjectServiceFacade extends ObjectSyncService, ObjectAsyncService {
 
 }

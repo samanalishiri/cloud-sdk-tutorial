@@ -41,9 +41,10 @@ public final class CredentialsUtils {
      * @return {@link Optional<AwsCredentials>}
      */
     public static Optional<AwsCredentials> loadCredentials() {
-        LOGGER.info("Load credentials...");
-        return Try.of(DefaultCredentialsProvider::create)
-                .map(DefaultCredentialsProvider::resolveCredentials)
+        return Try.withResources(DefaultCredentialsProvider::create)
+                .of(DefaultCredentialsProvider::resolveCredentials)
+                .onFailure(exception -> LOGGER.error("Credentials could not be loaded due to {}", exception.getMessage()))
+                .onSuccess(credentials -> LOGGER.info("Credentials loaded successfully by {}", credentials.providerName().orElseThrow()))
                 .toJavaOptional();
     }
 }

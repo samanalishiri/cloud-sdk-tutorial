@@ -21,6 +21,7 @@ import com.tutorial.aws.sqs.service.SqsService;
 import com.tutorial.aws.sqs.utils.SqsClientFactory;
 import io.vavr.control.Try;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -38,11 +39,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 @DisplayName("SQS Service Tests")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
+@DisabledIfSystemProperty(named = "credentials", matches = "unknown")
 class SqsServiceTest {
 
     private static SqsService underTest;

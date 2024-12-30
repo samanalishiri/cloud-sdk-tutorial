@@ -18,7 +18,7 @@
 package com.tutorial.aws.bucket.implementation.object;
 
 import com.tutorial.aws.bucket.contract.object.ObjectAsyncService;
-import com.tutorial.aws.bucket.contract.object.ObjectService;
+import com.tutorial.aws.bucket.contract.object.ObjectServiceFacade;
 import com.tutorial.aws.bucket.contract.object.ObjectSyncService;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
@@ -33,13 +33,13 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author Saman Alishirishahrbabak
  */
-public class ObjectServiceImpl implements ObjectService {
+public class ObjectServiceFacadeImpl implements ObjectServiceFacade {
 
     private final ObjectSyncService syncService;
 
     private final ObjectAsyncService asyncService;
 
-    public ObjectServiceImpl(ObjectSyncService syncService, ObjectAsyncService asyncService) {
+    public ObjectServiceFacadeImpl(ObjectSyncService syncService, ObjectAsyncService asyncService) {
         requireNonNull(syncService);
         requireNonNull(asyncService);
 

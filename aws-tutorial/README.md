@@ -1,6 +1,6 @@
 # <p align="center">Java AWS Tutorial</p>
 
-This tutorial developed around the AWS cloud platform.
+This tutorial developed around the AWS cloud platform with Java.
 
 It is included:
 
@@ -69,6 +69,7 @@ See [Localstack](https://github.com/localstack/localstack) website to obtain mor
 Install Localstack on docker via docker compose.
 
 ```yaml
+# docker-compose.yml
 version: "3.8"
 
 services:
@@ -90,7 +91,7 @@ services:
 Execute the following command to install.
 
 ```shell
-docker-compose -f ./localstack-docker-compose.yaml -p aws-tutorial up --build -d
+docker-compose -f ./docker-compose.yml -p aws-tutorial up --build -d
 ```
 
 Also, you can execute the following bat/sh file.
@@ -126,6 +127,14 @@ For testing with Localstack, it does not need to get credentials.
 
 ```shell
 mvn test -Dcredentials=Localstack
+```
+
+### Test (Mock)
+
+For testing with Mock when there is no real AWS account or any tools for simulating.
+
+```shell
+mvn test
 ```
 
 ##

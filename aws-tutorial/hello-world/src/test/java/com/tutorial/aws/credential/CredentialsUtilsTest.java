@@ -28,18 +28,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Saman Alishirishahrbabak
- * @version 1.0.0
- * @since 2022-08-01
  */
 @DisplayName("Credentials Tests")
 class CredentialsUtilsTest {
 
     @Test
-    @DisplayName("load default credentials via AWS CLI")
-    void loadCredentials_GivenNoParam_WhenLoadDefaultCredentialsFromSdk_ThenItShouldBeLoadDefaultProfile() {
-        Optional<AwsCredentials> credentials = CredentialsUtils.loadCredentials();
-        assertTrue(credentials.isPresent());
-        credentials.ifPresent(it -> {
+    void whenTryToLoadCredentialsByDefaultProvider_thenReturnCredentials() {
+        var actual = CredentialsUtils.loadCredentials();
+
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> {
             assertNotNull(it.accessKeyId());
             assertNotNull(it.secretAccessKey());
         });

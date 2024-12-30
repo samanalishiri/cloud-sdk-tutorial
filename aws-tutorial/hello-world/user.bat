@@ -1,7 +1,7 @@
 @echo off
 cls
 
-REM create the user
+REM create a user
 REM ====================================================================================================================
 set /p USERNAME=Enter username:
 

@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creating an S3 bucket.
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: "com-github-stepbysteptutorial-awstutorial"
+
+Resources:
+  AwsTutorialBucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LoggingConfiguration:
+        DestinationBucketName: !Ref AwsTutorialBucket
+        LogFilePrefix: "logs/"
+
+Outputs:
+  BucketName:
+    Description: The name of the S3 bucket created using this template.
+    Value: !Ref AwsTutorialBucket

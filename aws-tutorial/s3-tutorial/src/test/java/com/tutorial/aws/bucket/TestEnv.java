@@ -19,6 +19,8 @@ package com.tutorial.aws.bucket;
 
 import io.vavr.control.Try;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -26,18 +28,18 @@ import java.util.Properties;
  */
 public class TestEnv {
 
+    private static final Map<String, Properties> CREDENTIALS = new HashMap<>();
+
+    static {
+        CREDENTIALS.put(ENV.class.getSimpleName(), ENV.PROPERTIES);
+        CREDENTIALS.put(CLI.class.getSimpleName(), CLI.PROPERTIES);
+        CREDENTIALS.put(LocalStack.class.getSimpleName(), LocalStack.PROPERTIES);
+    }
+
     public static Properties loadCredentials() {
         return Try.of(() -> System.getProperty("credentials"))
-                .map(s -> switch (s) {
-                    case "ENV" -> ENV.PROPERTIES;
-                    case "CLI" -> CLI.PROPERTIES;
-                    case "Localstack" -> LocalStack.PROPERTIES;
-                    default -> throw new RuntimeException("credentials is unknown");
-                })
-                .getOrElse(() -> {
-                    System.setProperty("credentials", "Localstack");
-                    return LocalStack.PROPERTIES;
-                });
+                .map(s -> CREDENTIALS.getOrDefault(s, LocalStack.PROPERTIES))
+                .get();
     }
 
     private static class ENV {
@@ -49,7 +51,6 @@ public class TestEnv {
             PROPERTIES.put("accessKey", System.getenv("ACCESS_KEY_ID"));
             PROPERTIES.put("secretKey", System.getenv("SECRET_ACCESS_KEY"));
         }
-
     }
 
     private static class CLI {
@@ -59,10 +60,10 @@ public class TestEnv {
         static {
             PROPERTIES.put("region", "eu-central-1");
         }
-
     }
 
     private static class LocalStack {
+
         private static final Properties PROPERTIES = new Properties();
 
         static {

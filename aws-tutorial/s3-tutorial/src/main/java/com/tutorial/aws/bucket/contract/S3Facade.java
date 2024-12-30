@@ -18,10 +18,10 @@
 package com.tutorial.aws.bucket.contract;
 
 import com.tutorial.aws.bucket.contract.bucket.BucketService;
-import com.tutorial.aws.bucket.contract.object.ObjectService;
+import com.tutorial.aws.bucket.contract.object.ObjectServiceFacade;
 
 /**
  * @author Saman Alishirishahrbabak
  */
-public interface S3Facade extends BucketService, ObjectService {
+public interface S3Facade extends BucketService, ObjectServiceFacade {
 }

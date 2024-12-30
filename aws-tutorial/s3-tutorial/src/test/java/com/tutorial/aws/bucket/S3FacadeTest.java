@@ -18,17 +18,11 @@
 package com.tutorial.aws.bucket;
 
 import com.tutorial.aws.bucket.contract.S3Facade;
-import com.tutorial.aws.bucket.utils.IoUtils;
 import com.tutorial.aws.bucket.factory.S3ClientFactory;
+import com.tutorial.aws.bucket.utils.IoUtils;
 import io.vavr.control.Try;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import software.amazon.awssdk.services.s3.model.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,38 +30,39 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author Saman Alishirishahrbabak
  */
-@DisplayName("Bucket Service Tests")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
+@DisabledIfSystemProperty(named = "credentials", matches = "unknown", disabledReason = "There is no real AWS account or any tools for simulating")
 class S3FacadeTest {
 
-    public static final String BUCKET_NAME = "saman-aws-tutorial-bucket";
+    private static final String BUCKET_NAME = "saman-aws-tutorial-bucket";
 
-    public static final String OBJECT_NAME = "saman-aws-tutorial-bucket";
+    private static final String OBJECT_NAME = "saman-aws-tutorial-object";
 
-    public static final String FILE_NAME = "hello.txt";
+    private static final String TEST_FILE = "test.txt";
 
-    public static final String TEST_RESOURCES_PATH = "src/test/resources/%s";
+    private static final String TEST_FILE_RESOURCES_PATH = "src/test/resources/%s";
 
-    public static final String TARGET_PATH = "target/%s_%d";
+    private static final String TEST_FILE_TARGET_PATH = "target/%s_%d";
 
-    private static S3Facade underTest;
+    private static S3Facade systemUnderTest;
 
     @BeforeAll
     static void setUp() {
-        underTest = Try.of(() -> TestServiceFactory.createS3Facade(new S3ClientFactory(TestEnv.loadCredentials())))
+        systemUnderTest = Try.of(() -> TestServiceFactory.createS3Facade(new S3ClientFactory(TestEnv.loadCredentials())))
                 .onFailure(Assertions::fail)
                 .onSuccess(Assertions::assertNotNull)
                 .get();
     }
 
-    @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {BUCKET_NAME})
+    @Test
     @Order(1)
-    @DisplayName("bucket sync creation")
-    void createBucket_GivenBucketNameAsParam_WhenSendCreateRequest_ThenItShouldBeWaitUntilGetOKStatus(String name) {
-        Optional<HeadBucketResponse> response = underTest.createBucket(name);
-        assertTrue(response.isPresent());
-        response.ifPresent(it -> {
+    void givenBucketName_whenCreate_thenItShouldBeWaitUntilGetOKStatus() {
+        var givenName = BUCKET_NAME;
+
+        var actual = systemUnderTest.createBucket(givenName);
+
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> {
             assertTrue(it.sdkHttpResponse().isSuccessful());
             assertEquals(200, it.sdkHttpResponse().statusCode());
         });
@@ -75,103 +70,115 @@ class S3FacadeTest {
 
     @Test
     @Order(2)
-    @DisplayName("get all buckets")
-    void getAllBuckets_GivenNoParam_WhenSendGetRequest_ThenReturnAllBucketAsList() {
-        List<Bucket> buckets = underTest.getAllBuckets();
-        assertNotNull(buckets);
-        assertFalse(buckets.isEmpty());
+    void givenNoParam_whenGet_thenReturnAllBucketAsList() {
+        var actual = systemUnderTest.getAllBuckets();
+        assertNotNull(actual);
+        assertFalse(actual.isEmpty());
     }
 
-    @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {BUCKET_NAME})
+    @Test
     @Order(3)
-    @DisplayName("get one bucket")
-    void getOneBucket_GivenBucketNameAsParam_WhenSendGetRequest_ThenReturnTheBucket(String name) {
-        Optional<Bucket> bucket = underTest.getOneBucket(name);
-        assertTrue(bucket.isPresent());
-        bucket.ifPresent(it -> assertEquals(name, it.name()));
+    void givenBucketName_whenGet_thenReturnBucket() {
+        var givenName = BUCKET_NAME;
+
+        var actual = systemUnderTest.getOneBucket(givenName);
+
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> assertEquals(givenName, it.name()));
     }
 
-    @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', fileName=''{2}''")
-    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
+    @Test
     @Order(4)
-    @DisplayName("put one object")
-    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendPutObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey, String fileName) {
+    void givenBucketNameAndObjectKeyAndFile_whenPutObject_thenReturnOKStatus() {
+        var givenBucketName = BUCKET_NAME;
+        var givenObjectKey = OBJECT_NAME;
+        var givenFileName = TEST_FILE;
 
-        Optional<PutObjectResponse> response = underTest.putOneObject(bucketName, objectKey,
-                IoUtils.readFile(format(TEST_RESOURCES_PATH, fileName)));
-        assertTrue(response.isPresent());
-        response.ifPresent(it -> {
+        var actual = systemUnderTest.putOneObject(givenBucketName, givenObjectKey, IoUtils.readFile(format(TEST_FILE_RESOURCES_PATH, givenFileName)));
+
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> {
             assertTrue(it.sdkHttpResponse().isSuccessful());
             assertEquals(200, it.sdkHttpResponse().statusCode());
             assertNotNull(it.eTag());
         });
     }
 
-    @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', filePath=''{2}''")
-    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
+    @Test
     @Order(5)
-    @DisplayName("get one object")
-    void getOneObject_GivenBucketNameAndObjectKeyAndFilePathAsParam_WhenSendGetObjectRequest_ThenReturnTheByteArray(String bucketName, String objectKey, String filePath) {
+    void givenBucketNameAndObjectKeyAndFilePath_whenGetObject_thenReturnByteArray() {
+        var givenBucketName = BUCKET_NAME;
+        var givenObjectKey = OBJECT_NAME;
+        var givenFileName = TEST_FILE;
 
-        byte[] object = underTest.getOneObject(bucketName, objectKey);
-        assertNotNull(object);
-        IoUtils.createFile(format(TARGET_PATH, filePath, System.currentTimeMillis()), object);
+        var actual = systemUnderTest.getOneObject(givenBucketName, givenObjectKey);
+        assertNotNull(actual);
+        IoUtils.createFile(
+                format(TEST_FILE_TARGET_PATH, givenFileName, System.currentTimeMillis()),
+                actual
+        );
     }
 
-
-    @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}''")
-    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME})
+    @Test
     @Order(6)
-    @DisplayName("delete one object")
-    void deleteOneObject_GivenBucketNameAs1stAndObjectKeyAs2ndParam_WhenSendDeleteObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey) {
+    void givenBucketNameAndObjectKey_whenDeleteObject_thenReturnOKStatus() {
+        var givenBucketName = BUCKET_NAME;
+        var givenObjectKey = OBJECT_NAME;
 
-        Optional<DeleteObjectsResponse> response = underTest.deleteOneObject(bucketName, objectKey);
-        assertTrue(response.isPresent());
-        response.ifPresent(it -> {
+        var actual = systemUnderTest.deleteOneObject(givenBucketName, givenObjectKey);
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> {
             assertTrue(it.sdkHttpResponse().isSuccessful());
             assertEquals(200, it.sdkHttpResponse().statusCode());
         });
 
     }
 
-    @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', fileName=''{2}''")
-    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
+    @Test
     @Order(7)
-    @DisplayName("put one object async")
-    void putOneObject_GivenBucketNameAndObjectKeyAndFileAsParam_WhenSendAsyncPutObjectRequest_ThenReturnTheOKStatus(String bucketName, String objectKey, String fileName) {
+    void givenBucketNameAndObjectKeyAndFile_whenAsyncPutObject_thenReturnOKStatus() {
+        var givenBucketName = BUCKET_NAME;
+        var givenObjectKey = OBJECT_NAME;
+        var givenFileName = TEST_FILE;
 
-        underTest.putOneObject(bucketName, objectKey, IoUtils.readFile(format(TEST_RESOURCES_PATH, fileName)), (response, err) -> {
-            assertNotNull(response);
-            assertTrue(response.sdkHttpResponse().isSuccessful());
-            assertEquals(200, response.sdkHttpResponse().statusCode());
-            assertNotNull(response.eTag());
-        });
+        systemUnderTest.putOneObject(
+                givenBucketName,
+                givenObjectKey,
+                IoUtils.readFile(format(TEST_FILE_RESOURCES_PATH, givenFileName)),
+                (response, err) -> {
+                    assertNotNull(response);
+                    assertTrue(response.sdkHttpResponse().isSuccessful());
+                    assertEquals(200, response.sdkHttpResponse().statusCode());
+                    assertNotNull(response.eTag());
+                });
     }
 
-    @ParameterizedTest(name = "{index} => bucketName=''{0}'', objectKey=''{1}'', filePath=''{2}''")
-    @CsvSource({BUCKET_NAME + "," + OBJECT_NAME + "," + FILE_NAME})
+    @Test
     @Order(8)
-    @DisplayName("get one object async")
-    void getOneObject_GivenBucketNameAndObjectKeyAndFilePathAsParam_WhenSendAsyncGetObjectRequest_ThenReturnTheByteArray(String bucketName, String objectKey, String filePath) {
-        underTest.getOneObject(bucketName, objectKey, (response, err) -> {
-            assertNotNull(response);
-            IoUtils.createFile(format(TARGET_PATH, filePath, System.currentTimeMillis()), response.asByteArray());
-            underTest.deleteOneObject(bucketName, objectKey);
-        });
+    void givenBucketNameAndObjectKeyAndFilePath_whenAsyncGetObject_thenReturnByteArray() {
+        var givenBucketName = BUCKET_NAME;
+        var givenObjectKey = OBJECT_NAME;
+        var givenFileName = TEST_FILE;
+
+        systemUnderTest.getOneObject(
+                givenBucketName,
+                givenObjectKey,
+                (response, err) -> {
+                    assertNotNull(response);
+                    IoUtils.createFile(format(TEST_FILE_TARGET_PATH, givenFileName, System.currentTimeMillis()), response.asByteArray());
+                    systemUnderTest.deleteOneObject(givenBucketName, givenObjectKey);
+                });
     }
 
-    @ParameterizedTest(name = "{index} => name=''{0}''")
-    @ValueSource(strings = {BUCKET_NAME})
+    @Test
     @Order(9)
-    @DisplayName("delete one bucket")
-    void deleteOneBucket_GivenBucketNameAsParam_WhenSendDeleteRequest_ThenReturnNoContentStatus(String name) {
-        Optional<DeleteBucketResponse> response = underTest.deleteOneBucket(name);
-        assertTrue(response.isPresent());
-        response.ifPresent(it -> {
+    void givenBucketNameAsParam_whenDelete_thenReturnNoContentStatus() {
+        var givenName = BUCKET_NAME;
+        var actual = systemUnderTest.deleteOneBucket(givenName);
+        assertTrue(actual.isPresent());
+        actual.ifPresent(it -> {
             assertTrue(it.sdkHttpResponse().isSuccessful());
             assertEquals(204, it.sdkHttpResponse().statusCode());
         });
     }
-
 }
