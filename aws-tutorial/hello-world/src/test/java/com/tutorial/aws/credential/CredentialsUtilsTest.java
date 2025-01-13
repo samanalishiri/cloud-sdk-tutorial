@@ -17,11 +17,7 @@
 
 package com.tutorial.aws.credential;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Saman Alishirishahrbabak
  */
-@DisplayName("Credentials Tests")
 class CredentialsUtilsTest {
 
     @Test

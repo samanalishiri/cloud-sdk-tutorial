@@ -21,7 +21,7 @@ import io.vavr.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 
 import java.util.Optional;
 
@@ -41,10 +41,20 @@ public final class CredentialsUtils {
      * @return {@link Optional<AwsCredentials>}
      */
     public static Optional<AwsCredentials> loadCredentials() {
-        return Try.withResources(DefaultCredentialsProvider::create)
-                .of(DefaultCredentialsProvider::resolveCredentials)
+        return Try.of(() -> StaticCredentialsProvider.create(new AwsCredentials() {
+                            @Override
+                            public String accessKeyId() {
+                                return "fake-access-key";
+                            }
+
+                            @Override
+                            public String secretAccessKey() {
+                                return "fake-secret-key";
+                            }
+                        }))
+                .map(StaticCredentialsProvider::resolveCredentials)
                 .onFailure(exception -> LOGGER.error("Credentials could not be loaded due to {}", exception.getMessage()))
-                .onSuccess(credentials -> LOGGER.info("Credentials loaded successfully by {}", credentials.providerName().orElseThrow()))
+                .onSuccess(credentials -> LOGGER.info("Credentials loaded successfully by {}", credentials.providerName().orElse("unknown")))
                 .toJavaOptional();
     }
 }

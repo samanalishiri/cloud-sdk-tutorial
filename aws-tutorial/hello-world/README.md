@@ -12,12 +12,10 @@ execution.
 mvn clean package -DskipTests=true
 ```
 
-### Test (CLI)
-
-Get credentials from AWS CLI.
+### Test
 
 ```shell
-mvn test -Dcredentials=CLI
+mvn test
 ```
 
 ## Create User via CLI
